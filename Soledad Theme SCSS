@@ -1,1 +1,2621 @@
-Soledad CSS and Theme © 2024 by Kiel Denny is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/
+/*!
+
+
+Soledad CSS Theme 
+© 2024 by Kiel Denny 
+Licensed under CC BY-NC-SA 4.0.
+
+
+Segovia & Segovia Fino
+Copyright (c) 2009 by Paulo Heitlinger. 
+All rights reserved. Used according to EULA. 
+DO NOT use this font without permission from the copyright owner.
+
+
+Roman Antique & Roman Antique Italic
+Copyright (c) Typographer Mediengestaltung, 2000. 
+All rights reserved. Designed by Jeffrey S. Lee.
+Used according to DaFont’s free use terms.
+
+
+Quivira
+Created by Alexander Lange,
+public domain
+
+
+*/
+/*
+
+Terminology:
+- Provisionally: sets a style of a value of a style that may be overridden later.
+- Stipulates: requires a style or value, typically when something is being overridden.
+- Map: A dictionary of key-value pairs. I use this to collect variables about similar information like theme color or font families together.
+- Font: A collection of glyphs and information which represents ideas on page
+- Text: The manipulation of the font on the page to create a specific theme
+
+*/
+
+
+// Top-Level Statements
+	//Imports
+		// Modules
+			// SASS Color
+				/// Imports the SASS Color Module for more advanced manipulation and setting of colors
+				@use "sass:color"; 
+			
+			
+			// SASS List
+				/// Imports the SASS Lists Module for more advanced manipulation of list elements
+				@use "sass:list"; 
+			
+			
+			// SASS Map
+				/// Imports the SASS Map Module for the creation of map objects (dictionaries in Swift)
+				@use "sass:map"; 
+				
+				
+			// CSS Reset
+				/// Imports CSS Reset which clears default values from most CSS elements so that the declared CSS looks correct.
+				@use "node_modules/reset-css/sass/_reset.scss"; 
+			
+			
+		// Fonts
+			// Segovia (Normal)
+				/// Imports the Segovia font file from my GitHub project
+				/// Segovia is the font used for headings in this theme.
+				/// Do not use this font without purchasing a lisence from the copyright owner.
+				@font-face {
+					font-family: Segovia;
+					font-style: normal;
+					font-weight: 400;
+					src: url(https://rawcdn.githack.com/kielDenny/Soledad/ab073103f89e83772a4df49ba88fb3957c9117de/segoviaRegular.otf?min=1) ;
+				}
+				
+				
+			// Segovia Fino
+				/// Imports the Segovia Fino font file from my GitHub project
+				/// Segovia Fino is the font used for decorative in-line text in this theme.
+				/// Do not use this font without purchasing a lisence from the copyright owner.
+				@font-face {
+					font-family: Segovia;
+					font-style: normal;
+					font-weight: 400;
+					src: url(https://rawcdn.githack.com/kielDenny/Soledad/ab073103f89e83772a4df49ba88fb3957c9117de/segoviaFino.otf?min=1) ;
+				}
+				
+				
+			// Roman Antique
+				/// Imports the Roman Antique font file from my GitHub project
+				/// Roman Antique is the font used for all body text in this theme
+				/// Used according to DaFont’s free use terms. */
+				@font-face {
+					font-family: Roman Antique;
+					font-style: normal;
+					font-weight: 400;
+					src: url(https://rawcdn.githack.com/kielDenny/Soledad/51d3bcda1d2142b0c124466aa6dc7452d7c18d7b/romanAntique.ttf) ;
+				}
+				
+				
+			// Roman Antique Italic
+				/// Imports the Roman Antique Italic font file from my GitHub project
+				/// Roman Antique Italic is the font used for all body text in this theme
+				/// Used according to DaFont’s free use terms.
+				@font-face {
+					font-family: Roman Antique Itl;
+					font-style: italic;
+					font-weight: 400;
+					src: url(https://rawcdn.githack.com/kielDenny/Soledad/51d3bcda1d2142b0c124466aa6dc7452d7c18d7b/romanAntiqueItalic.ttf) ;
+				} 
+				
+				
+			// Quivira
+				/// Imports the Quivira font file from my GitHub project
+				/// Quivira is used as a fallback font for characters that can't be represented by the more decorative fonts like Segovia or Roman Antique. This also covers IPA symbols.
+				/// Public domain
+				@font-face {
+					font-family: Quivira;
+					font-style: italic;
+					font-weight: 400;
+					src: url(https://rawcdn.githack.com/kielDenny/Soledad/ab073103f89e83772a4df49ba88fb3957c9117de/Quivira.otf) ;
+				}
+	
+	// Variables
+		// Fonts
+			/// A map (dictionary) which contains keys and values related to the fonts used in this theme.
+			/// This is a repository for all variables that relate to fonts
+			/// In my theme, font is more narrowly defined than CSS. Font just means the font files and glyphs that they contain. Text is the manipulation and representation of the font on the page.
+			$fonts: (
+			
+				/// The first font that should be tried when presenting headings
+				"Heading": Segovia,
+				
+				/// The second font that should be tried when presenting headings
+				"Heading First Backup": Segovia Fino,
+				
+				/// The third font that should be tried when presenting headings. This is usually Quivira to represent glyphs that can't be represented by the previous fonts.
+				"Heading Second Backup": Quivira,
+				
+				/// A widely but not universally avalable to try if all other fonts fail. Used mainly for legacy systems.
+				"Heading Generic": Georgia,
+				
+				/// A web-safe font used when all other attempts to represent text fails. Used mainly for legacy systems.
+				"Heading Fallback": serif,
+				
+				/// The font that is intended to be used for longer spans of text like paragraph.
+				"Body": Roman Antique,
+				
+				/// First fallback for body text
+				"Body First Backup": Segovia Fino,
+				
+				/// Second fallback for body text
+				"Body Second Backup": Quivira,
+				
+				/// Widely avalable third fallback for body text
+				"Body Generic": Georgia,
+				
+				/// Legacy fallback for body text
+				"Body Fallback": serif,
+				
+				/// The font that is intended to be used when text is italicised.
+				/// This can be different than the non-italicised font as most have italic-specific forms that give it a unique feel
+				"Body Italic": Roman Antique Itl,
+				
+				/// First fallback for italicised body text
+				"Body Italic First Backup": Garamond,
+				
+				/// Second fallback for italicised body text
+				"Body Italic Second Backup": Quivira,
+				
+				/// Widely avalable third fallback for italicised text
+				"Body Italic Generic": Georgia,
+				
+				/// Legacy fallback for italicised text
+				"Body Italic Fallback": serif,
+				
+				/// The font that is intended to be used for decorative body text like quotes, buttons or other stylistic elements
+				"Decorative": Segovia Fino,
+				
+				/// First fallback for decorative text
+				"Decorative First Backup": Segovia,
+				
+				/// Second fallback for decorative text
+				"Decorative Second Backup": Quivira,
+				
+				/// Widely avalable third fallback
+				"Decorative Generic": Garamond,
+				
+				/// Legacy fallback
+				"Decorative Fallback": serif,
+				
+			);
+		
+		
+		// Theme Colors
+			/// A set of colors on a particular theme.
+			/// The colors are used to add visual interest to elements like buttons, links or highlighted text.
+			$themeColors: (
+			
+				/// The primary and most prevelant theme color on the page
+				/// This value is similar to emerald green color
+				"Primary": #2C5705,
+				
+				/// The secondary and second most prevelant color on the page
+				/// This value is similar to a faded red color
+				"Secondary": #8B0808,
+				
+				/// The tertiary and third most prevelant color on the page
+				/// This value is similar to a golden yellow color
+				"Tertiary": #CDA224,
+				
+				/// The quatrany and fourth most prevelant color on the page
+				/// The value is similar to an aqua blue-green color
+				"Quaternary": #17CFA4,
+				
+				/// The quinary and fifth most prevelant color on the page
+				/// The value is similar to a salmon pink
+				"Quinary": #FF7F50,
+				
+				/// The senary and sixth most prevelant color on the page
+				/// The value is similar to a medium blue color
+				"Senary": #183EA7,
+				
+				/// The default/standard alpha (transparency) value used for most visual items
+				/// Visual items are not completely opaque but are semi-translucent to simulate the appearance of ink on a printed page.
+				"Alpha": 0.75,
+				
+				/// One step more opaque than the default
+				"Alpha + 1": 0.80,
+				
+				/// Two steps more opaque than the default
+				"Alpha + 2": 0.90,
+				
+				/// Three steps more opaque than the default (fully opaque)
+				"Alpha + 3": 1.00,
+				
+				/// One step less opaque (more translucent) than the default
+				"Alpha - 1": 0.66,
+				
+				/// Two step less opaque than the default
+				"Alpha - 2": 0.50,
+				
+				/// Three steps less opaque than the default
+				"Alpha - 3": 0.33,
+				
+			);
+			
+			
+		// Text
+			/// A map (dictionary) which contains keys and values related to text formatting.
+			/// This is a repository for all variables that relate to text presentation.
+			/// In my theme, font is more narrowly defined than CSS. Font just means the font files and glyphs that they contain. Text is the manipulation and representation of the font on the page.
+			$text: (
+				
+				/// The starting font size for all text.
+				/// Body text should always be the base text size.
+				/// Text is either scaled up or scaled down from this point.
+				"Base Size": 16pt,
+				
+				/// This is a value used to scale up headings by a consistant factor per each level increased
+				"Heading Scale Factor": 0.5em,
+				
+				/// The primary text color used for most of the text on the page
+				"Primary Color": color.change(#060921, $alpha: map.get($themeColors, "Alpha")),
+				
+				/// The secondary text color for when the primary text color is not visible enough on the page.
+				"Secondary Color": color.change(#E5E3D7, $alpha: map.get($themeColors, "Alpha")),
+				
+				/// The tertiary text color which is a more pure white color than the Secondary text color.
+				"Tertiary Color": color.change(#E8E8E8, $alpha: map.get($themeColors, "Alpha"))
+				
+			);
+			
+			
+		// Design Elements
+			/// A set of variables used for design elements
+			/// It contains values that are reused to create consistant visual styles for CSS elemenets
+			/// It also contains the URLs for site-wide graphics 
+			$design: (
+				
+				/// A URL to an image that will be displayed behind the page
+				/// The current site background is an image of a leather book
+				"Site Background": url(https://rawcdn.githack.com/kielDenny/Soledad/ab073103f89e83772a4df49ba88fb3957c9117de/leatherBookCover.jpg),
+				
+				/// A URL to an image that will be displayed in front of the site background to indicate that it is a page on the overall site.
+				/// The current page background is an image of brown textured paper.
+				"Page Background": url(https://rawcdn.githack.com/kielDenny/Soledad/ab073103f89e83772a4df49ba88fb3957c9117de/brownPaper2.jpg),
+				
+				/// The thickness for visual elements which contain lines like borders or horizontal rule items
+				"Line Thickness": 2pt,
+				
+				/// Removes spacing or thickness elements on all sides of an object.
+				/// Intended to be used with padding, margins, etc.
+				"Remove Space": 0em 0em 0em 0em,
+				
+				/// The amount of padding applied to objects where direct contact with the element's container is visually unappealing.
+				/// This is used to achieve a consistant amount of padding for all elements
+				"Default Padding": 0.5em 0.5em 0.5em 0.5em,
+				
+				/// Padding for heading elements
+				/// It adds an equal amount of space above and below the text but not on the right or left size;
+				"Heading Padding": 0.5em 0em 0.5em 0em,
+				
+			);
+			
+			
+	// Extensions
+		// Fonts
+			// Headngs
+				/// A placeholder class used as the parent style (essentially a template) for heading elements which extend (or inherit) this style.
+				/// All heading elements will recieve these styles by default but can be overridden
+				%styles_Headings {
+					
+					/// Applies the perscribed font family for headings.
+					/// The fonts are tried to be applied to text in the order presented in the Font map (above.)
+					/// If a glyph is not found in one family, the browser goes to the next family and tried to apply it and so on and so on.
+					font-family: map.get($fonts, "Heading"), map.get($fonts, "Heading First Backup"), map.get($fonts, "Heading Second Backup"), map.get($fonts, "Heading Generic"), map.get($fonts, "Heading Fallback");
+					
+					/// Headings are justified left unless otherwise specified
+					text-align: left;
+					
+					/// Headings have a line height of 1em or 100% of the text's height, unless otherwise specified.
+					line-height: 1.0em;
+					
+					/// The color of heading text elements will be the Primary unless othewise specified.
+					/// The text color will be as opaque as the default Alpha
+					color: map.get($text, "Primary Color"); 
+					
+				}
+			
+			
+			// Body
+				/// A placeholder class used as a parent style for the body elements which inherit it. 
+				%styles_Body {
+					
+					/// Applies the following font families to styles which inherit this class.
+					font-family: map.get($fonts, "Body"), map.get($fonts, "Body First Backup"), map.get($fonts, "Body Second Backup"), map.get($fonts, "Body Generic"), map.get($fonts, "Body Fallback");
+					
+					/// Sets the color of the text to be the Primary
+					color: map.get($text, "Primary Color") !important;
+					
+					/// Sets the size of the text-align
+					font-size: map.get($text, "Base Size") !important;
+					
+				}
+				
+				
+			// Body + Italic
+				/// A placeholder class used as a parent style for italicised body elements which inherit it.
+				%styles_BodyItalic {
+					
+					/// Applies the following font families to styles which inherit this class
+					font-family: map.get($fonts, "Body Italic"), map.get($fonts, "Body Italic First Backup"), map.get($fonts, "Body Italic Second Backup"), map.get($fonts, "Body Italic Generic"), map.get($fonts, "Body Italic Fallback");
+					
+					/// Sets the color of the text to be the Primary
+					color: map.get($text, "Primary Color");
+					
+					/// The size of the text will be inherited by the parent class to keep the size consistent with the surrounding text.
+					font-size: inherit;
+					
+				}
+			
+			
+			// Decorative Body Font
+				/// A placeholder class used as a parent style for decorative body elements which inherit it
+				%styles_Decorative {
+				
+					/// Applies the following font families to styles which inherit this class.
+					font-family: map.get($fonts, "Decorative"), map.get($fonts, "Decorative First Backup"), map.get($fonts, "Decorative Second Backup"), map.get($fonts, "Decorative Generic"), map.get($fonts, "Decorative Fallback");
+					
+					/// Sets the color of the text to be the Primary
+					color: map.get($text, "Primary Color");
+					
+					/// The size of the text will be inherited by the parent class to keep the size consistent with the surrounding text.
+					font-size: inherit; 
+					
+				}
+			
+			
+	// Mix-ins
+		// Inheritor Mix-in
+			/// A placeholder class used as a template for objects which inherit their styles from parent styles.
+			/// This is to allow styles to explicitly (by decleration) inherit when they could potentially use a default style or refer to some other style instead.
+			/// This applies the most common inheritances
+			/// The inheritances can be overridden in specific classes even after this class is extended.
+			@mixin InheritorManager($displayStyles: false, $height: false, $width: false, $boxModel: false, $background: false, $font: false, $text: false, $all: false) {
+				
+				@if $all {
+					$displayStyles: true;
+					$height: true;
+					$width: true;
+					$boxModel: true;
+					$background: true;
+					$font: true;
+					$text: true;
+				}
+				
+				@if $displayStyles {
+					/// Applies the general display styles
+					display: inherit;
+					position: inherit;
+				}
+				
+				
+				@if $height {
+					/// Sets the height information to be inherited
+					height: inherit;
+					min-height: inherit;
+					max-height: inherit;
+				}
+				
+				
+				@if $width {
+					/// Sets the width information to be inherited
+					width: inherit;
+					min-width: inherit;
+					max-width: inherit;
+				}
+				
+				
+				@if $boxModel {
+					/// Sets the box model to be inherited
+					padding: inherit;
+					border: inherit;
+					margin: inherit;
+				}
+				
+				
+				@if $background {
+					/// Sets the background information to be inherited
+					background: inherit;
+					background-color: inherit;
+				}
+				
+				
+				@if $font {
+					/// Sets the font information to be inherited
+					font-family: inherit;
+					font-size: inherit;
+					font-style: inherit;
+					font-weight: inherit;
+				}
+				
+				
+				@if $text {
+					/// Sets the text information to be inherited
+					text-align: inherit;
+					text-align-last: inherit;
+					unicode-bidi: inherit;
+					vertical-align: inherit;
+					text-decoration: inherit;
+					text-shadow: inherit;
+					text-transform: inherit;
+					text-indent: inherit;
+					letter-spacing: inherit;
+					line-height: inherit;
+					word-spacing: inherit;
+					white-space: inherit;
+					color: inherit;
+				}
+				
+				
+			}
+			
+	// Functions
+		// Text
+			// Scale Text
+				
+				/// A function used to scale text from the base font size to the appropreate text size for an heading of the given level.
+				/// For example scaleText(5) would return a value five levels above the base font size.
+				/// This function is intended to be used with values from 0 to 4 with 0 corresponding H5 and 4 to H1.
+				@function scaleText($level:0) {
+				
+					/// This statement first calculates the value of the heading level multiplied by the heading scale factor
+					/// The product is then added to the base font size
+					/// The result is the newly scaled font size.
+					/// The value plus units are returned by the function to the calling scope.
+					@return calc(map.get($text, "Base Size") + map.get($text, "Heading Scale Factor") * $level);
+				
+				}
+			
+			
+// CSS Statements
+	// General Formatting
+		// All Items Site-Wide
+			/// This group of selectors applies the following formatting to all elements on the page.
+			/// Due to its broad scope, it should be used exceedingly sparingly as it is easy to override formatting that should not be changed (like the homepage icon font which if changed will render glyph not found icons which are typically ugly empty boxes.)
+			.user-css *,
+			.user-css-extended *,
+			.user-presentation *,
+			#world-menu * {
+			
+				/// This applies a buffer of the specified size to the top of every element when scrolling.
+				/// The World Anvil banner typically sticks to the page and covers the destination of internal page scrolling (like clicking on links to anchors and table of contents items.)
+				scroll-margin-top: 75px;
+			
+			}
+		
+		
+		// Font Awesome Fonts
+			/// This sets the following styles to all Font Awesome spans
+			.fa-solid, .fas,
+			.fa-regular .fas,
+			.fa-light .fas,
+			.fa-thin .fas,
+			.fa-duotone .fas,
+			.fa-sharp fa-solid .fas,
+			.fa-sharp fa-regular .fas,
+			.fa-sharp fa-light .fas,
+			.fa-sharp fa-thin .fas,
+			.fa-brands .fas {
+				
+				
+				
+				/// Sets the size of the Font Awesome text (the icons) to be 1.5 times larger than the normal text
+				font-size: 1.5em;
+				
+				/// Sets the line height for the Font Awesome text (the icons) to be 1.5 times larger than the line height.
+				line-height: 1.5em;
+				
+			}
+		
+		
+		// Structural Elements
+			// Mobile Sidebar 
+				/// The following set of properties changes the mobile sidebar to appear above the article as opposed to below (which is the default and looks a little off to me) 
+				/*! The following code is unchanged from World Anvil’s Article and BBCode CSS code snippets. All credit to the original creators of this code. */
+				@media (max-width: 992px) {
+					
+					.user-css #profile .row {
+						display: flex;
+						flex-direction: column;
+					}
+					
+					.user-css .article-content-left {
+						order: 2;
+					}
+					
+					.user-css #profile .row .row {
+						display: block;
+					}
+					
+				}
+				
+			
+		// Visual Items
+			// World Background
+				/// Sets the background of the world and applies the subsequent styles.
+				.user-css-presentation {
+			
+					/// Sets the world background (displayed behind the page) to that specified by the URL (the map-like paper by default.)
+					background-image: map.get($design, "Site Background"); 
+				
+					/// Sets the background to be produced once and only once.
+					background-repeat: no-repeat; 
+				
+					/// Sets the background to not scroll or move at all as the user scrolls down the page.
+					background-attachment: fixed; 
+				
+					/// Changes the background size to be cover sized (so that it is correctly sized to fit the screen)
+					background-size: cover; 
+				
+				}
+			
+			
+			// Page Background
+				/// Sets the background of pages in this world and applies subsequent styles.
+				.user-css-presentation .page {
+				
+					/// Sets the background of pages (displayd on top of the world background) to that specified by the URL.
+					background: map.get($design, "Page Background");
+					
+					/// Changes the background size to be cover sized (so that it is correctly sized to fit the screen)
+					background-size: cover;
+					
+					/// Sets the opacity of the page to be opaque as opposed to any degree of transparency.
+					opacity: 1.00; 
+				
+				}
+			
+			
+			// Site-Wide Icons
+				// Global Copyright Icon
+					/// Properties for any Creative Commons icons
+					.copyright-attribution a i {
+					
+						/// Sets the color of the Creative Commons icons to be the secondary color with the default transparency.
+						color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha"));
+					
+					}
+				
+			// Copyright Text
+				/// Applies the following styles to the copyright text at the bottom of each page
+				.copyright-attribution {
+				
+					/// The copyright text extends (inherits) the decorative font style
+					@extend %styles_Decorative;
+					
+					/// Sets the size of the text to 0 times larger than the default text size (the base text size.)
+					font-size: scaleText(0);
+					
+					/// Adds white space below the text to create space between it and the end of the page background.
+					padding-bottom: 0.5em;
+					
+				}
+				
+				
+			// Graphical User Interface
+				// Buttons
+					// Buttons Normal State
+						/// Sets the style for buttons
+						.user-css-presentation .btn,
+						.user-css-presentation .btn-secondary {
+							
+							/// Applies the default body text formatting to buttons.
+							@extend %styles_Decorative; 
+							
+							/// Sets the background color of the button to be that of the secondary accent color.
+							background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha"));
+							
+							/// Ensures the height of the button is adjustd to fit the button text.
+							height: auto;
+							
+							/// Ensures the width of the button is adjusted to fit the button text.
+							width: auto;
+							
+							/// Changes the alignmnt of the button text from justified (declared in the Body Formatting) to centerd.
+							text-align: center;
+							
+						}
+					
+					// Buttons on Hover
+						/// When buttons are hovered over with a cursor, this style is applied to them instead of the normal style.
+						.user-css-presentation .btn:hover,
+						.user-css-presentation .btn-secondary:hover {
+							
+							/// Applies the default body text formatting to buttons.
+							@extend %styles_Decorative; 
+							
+							
+							/// This changes the background color of buttons to make them slightly darker to indicate that it is being hovered over.
+							background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha + 3"));
+							
+						}
+					
+					
+				// Scrollbars
+					/// Stipulates the style for the scrollbar background
+					.user-css ::-webkit-scrollbar,
+					.user-css-extended ::-webkit-scrollbar {
+						
+						/// Stipulates that this will not appear on the page
+						display: none;
+						
+					}
+					
+					
+					/// Stipulates the style for the scrollbar track when hovered over
+					.user-css ::-webkit-scrollbar-track,
+					.user-css-extended ::-webkit-scrollbar-track {
+						
+						/// Stipulates that this will not appear on the page
+						display: none;
+						
+					}
+					
+					
+					/// Stipulates the style for the bar which shows the scrolling position within the overall bar
+					.user-css ::-webkit-scrollbar-thumb,
+					.user-css-extended ::-webkit-scrollbar-thumb {
+						
+						/// Stipulates that this will not appear on the page
+						display: none;
+						
+					}
+					
+					
+					/// Stipulates the style of the scrollbar position when the user hovers over it with their cursor.
+					.user-css ::-webkit-scrollbar-thumb:hover,
+					.user-css-extended ::-webkit-scrollbar-thumb:hover {
+						
+						/// Stipulates that this will not appear on the page
+						display: none;
+						
+					}
+					
+					
+				// World Navigation Menu
+					// World Navigation Menu Button
+						/// Changes the world navigation pallet (the icon with three bullet points and three lines by default) which allows users to jump from one part of the site to another
+						.world-navigation-palette-trigger  {
+							
+							/// Moves the pallet from the left side of the screen to be flush right
+							/// This uses the !important statement in order to override the flush-left style used by most themes
+							right: 0px !important;
+							
+							/// Moves the box 250 px down from the top of the screen
+							top: 250px;
+							
+							/// Changes the left edge of the box from being stuck to the left edge of the screen to auto (essentially the normal width of the box.)
+							left: auto;
+							
+						}
+					
+					
+					// World Navigation Panel
+						/// Modifies the styles for the world navigation menu (the box that is presented after the user clicks on the world navigation pallet.)
+						.user-css-presentation #world-navigation-sidebar {
+						
+							/// Moves the position of the pannel to 60px away from the right edge of the screen
+							right: 60px !important;
+							
+							/// Changes the left edge of the box from being stuck from the left edge to be the width of the box instead.
+							left: auto !important;
+							
+							/// Sets the background of the pannel to be that of a paper texture which is also used by the page background.
+							background: map.get($design, "Page Background");
+							
+						}
+				
+				
+				// Back to World Buttons
+					// Back to World Buttons Normal State
+						/// Sets the styles of the back to world button which appears at the top of most articles
+						.user-css div .backtoworld a {
+							
+							/// Applies the decorative text formatting to the style
+							@extend %styles_Decorative; 
+							
+							/// Changes the text color of the button to the secondary color
+							color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+							
+							/// Centers the text horizontally within the space of the button
+							text-align: center;
+							
+							/// Sets the color of the button to the tertiary color
+							background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha"));
+							
+							/// Sets the padding of the box be 1 em larger on every side.
+							padding: map.get($design, "Default Padding");
+							
+							/// Ensures that the back to world button is being positioned relative to its container
+							position: relative;
+							
+							/// Moves the position of the button 20px above its bounding box
+							top: -20px;
+						
+						}
+					
+					
+					// Back to World Buttons On Hover
+						/// Sets the style of the back to world button when it is hovered over by the user with a curser
+						.user-css div .backtoworld a:hover {
+							
+							/// Changes the background color of 
+							background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha + 3"));
+							
+							/// Changes the text color to be the secondary text color
+							color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+						}
+				
+				
+				// Back to Top Button
+					/// Sets the style for the back to top (of the article) button found on most articles.
+					.user-css-presentation .backtotop-button {
+						
+						/// Sets the text color of the back to top button to be the alternative text
+						color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+						/// Sets the background color of the button to be the secondary color
+						background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha"));
+					
+					}
+				
+				
+				// Table of Contents
+					/// The following code stipulates the formatting of the table of contents which appears on most articles
+					
+					/// TOC Icon (Displayed on screen before the user hovers over)
+					.user-css .articletoc::before {
+						
+						/// Stipulates that the content of the TOC Icon comes from the following URL (a list icon)
+						content: url(https://rawcdn.githack.com/kielDenny/Soledad/c805e23c44c2e3e745f25e7a81055e4ceface6d6/ListIcon.webp);
+						
+						/// For Macs, this stipulates that the icon to 'stick' in the text which means to keep its position when scrolling.
+						position: -webkit-sticky;
+						
+						/// For all else, tells the icon to 'stick' in the text which means to keep its position when scrolling.
+						position: sticky;
+						
+						/// Stipulates that there is no background behind the icon
+						background: none;
+						
+					}
+					
+					
+					/// This stipulates the formatting for the expanded TOC Box (The box which contains the TOC elements)
+					.user-css .articletoc {
+						
+						/// Stipulates that the background of the box will be the same as the page background.
+						background: map.get($design, "Page Background");
+						
+						/// Stipulates the size of the entire box (Keep as it is unless you want to do a complete overhaul.)
+						width: 250px;
+						
+						/// Stipulates the size of the minimized box (icon + padding)
+						max-height: 42px;
+						
+						/// Stipulates that the box will be in the same place on the screen reguardless of scrolling
+						position: fixed;
+						
+						/// Stipulates that the icon will appear this far from the top of the bounding box.
+						/// On my Mac Book Pro this appears to be in a good spot but it may be different on other screens
+						top: 305px;
+						
+						/// Shoves all but 110 px of the box off of the screen, this is done to 'hide' the box when the icon is not hovered over.
+						right: -190px;
+						
+						/// Stipulates that the TOC box will be ‘on top of’ all other elements on the page 
+						z-index: 5000; 
+						
+						/// Allows the content in the TOC box to be scrolled if too big for the box 
+						/// This is not the default behavior; changing this will force the content to be cut off if it is outside the borders of the box.
+						overflow: auto;
+						
+						/// Stipulates a smooth sliding transition from off-screen onto-screen. (default is 1s)
+						transition: 1s ease;
+						
+					}
+					
+					
+					/// The following code stipulates the style of the TOC icon hover effect (the animation applied when the icon is hovered over)
+					.user-css .articletoc:hover {
+						
+						/// When expanded, the TOC box will take up 50% of the screen's height.
+						max-height: 50%;
+						
+						/// When expanded, the left side of the box will be on the left side of the screen (essentially removes the 'hide' effect created above to reveal the TOC.)
+						right: 0px;
+						
+					}
+					
+					
+					/// Specifies the style for TOC Links (TOC content)
+					.user-css .article-toc-link {
+						
+						/// Stipulates that the font will be the same as the body text
+						@extend %styles_Body;
+						
+						/// Stipulates that the text color will be the same as the normal text color
+						color: map.get($text, "Primary Color");
+						
+						/// Stipulates that the text will always be right aligned.
+						text-align: right;
+						
+						/// Stipulates that the text can't be more than the following width.
+						max-width: 185px;
+						
+						/// Stipulates that the text box will be pushed all the way to the right side of the screen.
+						right: 0px;
+						
+						/// Stipulates that there will be a margin of the following size on the left side of all text.
+						/// This is so that the text doesn't overrun the icon when it is scrolled by the user.
+						margin-left: 40px;
+						
+					}
+					
+					
+					/// Stipulates styles about the TOC text 
+					.user-css .article-toc-link,
+					.user-css .article-toc-link:hover {
+						
+						/// This stipulates that there won't be borders around the text.
+						border-style: none !important; // Removes any borders around all links in the TOC
+						
+					}
+					
+			
+			// Navigation Tabs 
+				// Selected Tab - Normal State
+					/// Sets the style of navigation tabs when they are the actively displayed tab but not hovered over.
+					.user-css-presentation .nav-tabs .nav-item.show .nav-link,
+					.user-css-presentation .nav-tabs .nav-link.active {
+						
+						/// Extends the decorative text style
+						@extend %styles_Decorative;
+						
+						/// Sets the background color of the tab in its normal state to the Primary
+						background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+						
+						/// Sets the text color of the tab to be the secondary color
+						color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+					}
+				
+				
+				// Selected Tab - On Hover
+					/// Sets the style of navigation tabs when they are actively displayed and being hovered over by the user with the cursor.
+					.user-css-presentation .nav-tabs .nav-item.show .nav-link:hover,
+					.user-css-presentation .nav-tabs .nav-link.active:hover {
+						
+						/// Extends the decorative text style
+						@extend %styles_Decorative;
+						
+						/// Sets the background color of the tab in its normal state to the Primary
+						background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha + 3"));
+						
+						/// Sets the text color of the tab to be the secondary color
+						color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+					}
+				
+				
+				// Other Tabs - Normal State
+					/// Sets the style of the navigation tabs when they are not the actively displayed tab and it is not being hovered over.
+					.user-css-presentation .nav-tabs .nav-link {
+						
+						/// Extends the decorative text style
+						@extend %styles_Decorative;
+						
+						/// Changes the background color of the tab to the secondary color
+						background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha"));
+						
+						///  Sets the text color of the tab to the secondary color
+						color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+					}
+				
+				
+				// Other Tabs - On Hover
+					/// Sets the style of the navigation tab when it is not the actively displayed tab and it is being hovered over.
+					.user-css-presentation .nav-tabs .nav-link:hover {
+						
+						/// Extends the decorative text style
+						@extend %styles_Decorative;
+						
+						/// Changes the background color to the secondary color
+						background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha + 3"));
+						
+						/// Sets the text color of the tab to the secondary color
+						color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+						
+					}
+			
+			
+			// Search Bar
+				/// Modifies the style of the search box that appears at the top of all pages (including the world homepage.)
+				.user-css .search-form .typeahead-input {
+					
+					/// The search bar's text will be styled to match the body format
+					@extend %styles_Decorative;
+					
+					/// Ensures the search bar is positioned relative to its bounding box
+					position: relative;
+					
+					/// Changes the position of the search bar to be 75px below the top of its bounding box
+					top: 75px;
+					
+					/// Changes the position of the search bar to be 25px from the left of its bounding box
+					left: 25px;
+					
+				}
+				
+				
+				/// Modifies the style of the box that is produced by dropdown menu after text is entered
+				.user-css .dropdown-menu {
+					
+					/// Sets the background of the box to be the same as the page background
+					background: map.get($design, "Page Background");
+					
+				}
+				
+				
+				/// Modifies the entries that are produced in the search box
+				.user-css .dropdown-menu a {
+					
+					/// The text extends the decorative class
+					@extend %styles_Decorative;
+					
+					/// Sets the text color to be the primary text color with transparency 
+					color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+			
+			
+	// World Homepage Formatting
+		// World Title
+			/// Formatting for the name of the world as it appears at the top of the world homepage.
+			.user-css .heading h1.world-title {
+			
+				/// Applies the heading formatting defined by the base Headings class (defined above)
+				@extend %styles_Headings;
+				
+				/// Sets the color of the title to be the primary text color with transparency
+				color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Scales the text 4 levels above the normal text size.
+				/// Base Size + 4em
+				font-size: scaleText(4);
+				
+				/// Forces the world title to the center of the display box
+				text-align: center;
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+		
+		
+		// World Subtitle
+			/// Formatting applied to the world's subtitle (if applicable)
+			.user-css h1 .world-subtitle small {
+				
+				/// Applies the heading formatting defined by the base Headings class (defined above)
+				@extend %styles_Headings;
+				
+				/// Sets the color of the subtitle to be the primary text color with transparency
+				color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Scales down the subtitle to be 75% of the size of the world title
+				font-size: 75%;
+				
+				/// Forces the world subtitle to the center of the display box
+				text-align: center;
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+			
+		
+		
+		// World Date
+			/// Settings applied to the current, in-world date (if applicable)
+			.user-css h3.world-currentDate {
+				
+				/// Applies the heading formatting defined by the base Headings class (defined above)
+				@extend %styles_Headings;
+				
+				/// Scales the world date to be two levels larger than the default text size
+				font-size: scaleText(2);
+				
+				/// Sets the color of the current to be the primary text color with transparency
+				color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Forces the current in-world date to the center of the display box
+				text-align: center;
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+			
+		
+		
+		// World Credits
+			/// Settings applied to the authors / owners of the article
+			.user-css .world-authors .author-item,
+			.worldOwners {
+				
+				/// Applies the headings text style to the credits
+				@extend %styles_Headings;
+				
+				/// Forces the authors date to the center of the display box
+				text-align: center;
+				
+				/// Scales the text to be 2 levels larger than the default text size
+				font-size: scaleText(2);
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+		
+		// World Description
+			/// A general synopsis that appears at the top of the page (undernearth the world credits if they are present)
+			.subheading {
+				
+				/// Extends the body formatting to the world description
+				@extend %styles_Body;
+				
+				// Sets the size of the text to be the site-wide font size.
+				font-size: map.get($text, "Base Size");
+				
+				/// The text is already centered on the page but it is also justified to match the subsequent formatting.
+				text-align: justify;
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: 2em 0em 0em 0em;
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				/// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+		
+		
+		
+		// Full-Width Custom Content
+			/// Applies the following formatting to all custom context on the homepage
+			.user-custom-content {
+				
+				/// Extends the body formatting to the text
+				@extend %styles_Body;
+				
+				// Sets the size of the text to be the site-wide font size.
+				font-size: map.get($text, "Base Size");
+				
+				/// The text is already centered on the page but it is also justified to match the subsequent formatting.
+				text-align: justify;
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Remove Space");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+			
+			
+		// Section Titles
+			/// Applies the formatting for the major default headings on the homepage (ie World Codex, Timelines, Maps)
+			.user-css .world-content h2 {
+				
+				/// Applies the headings text style to the credits
+				@extend %styles_Headings;
+				
+				/// Forces the authors date to the center of the display box
+				text-align: center;
+				
+				/// Scales the text to be 2 levels larger than the default text size
+				font-size: scaleText(2);
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: 0px 0px map.get($design, "Line Thickness") 0px;
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Heading Padding");
+				
+			}
+		
+		
+		// Article Links
+			/// The following code sets the styles for any links in the auto-generated sections of the homepage (world codex articles, timelines, etc.)
+			#world-menu ul a,
+			#world-menu div a,
+			#world-menu ul li div h5 a,
+			#world-menu div ul li a,
+			#world-timelines a {
+				
+				/// Sets the color of the article links to be the primary text color (reguardless of other link colors.)
+				color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Applies the headings text style to the credits
+				@extend %styles_Body;
+				
+				/// Scales the text to be 2 levels larger than the default text size
+				font-size: map.get($text, "Base Size");
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Heading Padding");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+		
+		
+		// World Maps
+			/// Applies the following styles to world map items (the container in which the map preview, text and margins around them.)
+			#world-maps ul li {
+				
+				/// Sets the background to be empty
+				background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Changes the color of the map title
+				color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Applies the headings text style to the credits
+				@extend %styles_Body;
+				
+				/// Centers the map name beneath the map.
+				text-align: center;
+				
+				/// Scales the text to be 2 levels larger than the default text size
+				font-size: map.get($text, "Base Size");
+				
+				/// Adds default heading padding to the top and bottom of the element
+				padding: map.get($design, "Remove Space");
+				
+				/// Removes any border-width spacing around the element
+				border-width: map.get($design, "Remove Space");
+				
+				// Removes any margin spacing around the element
+				margin: map.get($design, "Remove Space");
+				
+			}
+			
+			/// Applies the following styles to the text 
+			#world-maps ul li h5 {
+				
+				text-align: center;
+				
+			}
+		
+		
+		// Followers Counter
+			/// Applies the following style to the outer box of the follower counter
+			.user-css .world-content .followers-counter {
+				
+				/// Sets the background color to the primary theme color
+				background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Removes all papdding around the object
+				padding: map.get($design, "Remove Space");
+				
+				/// Removes all border around the object
+				border-width: map.get($design, "Remove Space");
+				
+				/// Removes all margins around the object
+				margin: map.get($design, "Remove Space");
+				
+			}
+			
+			
+			/// Applies the following styles to the text components of the follower counter
+			.user-css .world-content .followers-counter * {
+				
+				/// The text of the followers counter extends the decorative text formatting
+				@extend %styles_Decorative;
+				
+				/// The text of the followers counter will be the secondary text color
+				color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha"));
+				
+				/// Removes any background color so that the follower counter box displays through.
+				background: none;
+				
+			}
+		
+		
+		// RSS Feed
+			/// Applies the following styles to the RSS Feed button
+			.user-css .world-share-rss-feed-link {
+				
+				/// Adds spacing around all sides of the RSS Feed button to seperate it from the other elements
+				margin: map.get($design, "Default Padding");
+				
+			}
+		
+		
+	// Navigation Articles (not true articles but destinations branching off of the world homepage)
+		// World Codex Sidebar Heading
+			/// Applies the following styles to the World Codex sidebar for all navigation articles.
+			.user-css.page-category h2 {
+				
+				/// Extends the headings style
+				@extend %styles_Headings;
+				
+				/// Sets the font size of the heading to be 2 levels larger than the base font size
+				font-size: scaleText(2);
+				
+			}
+		
+		
+	// Maps Formatting
+	
+	
+	
+	// Timelines Formatting
+	
+	
+	// Articles Formatting
+		// Article Title Box
+				/// Applies to the following styles to the box which contains the article title and subtitle
+				.article-title {
+					
+					/// Sets an amount of white space below the box to seperate the top two elements from the rest of the text reguardless if the subtitle is present or not.
+					padding: 0px 0px calc(map.get($text, "Base Size") * 2) 0px;
+					
+				}
+	
+		// Headings
+			// H1 (Article Titles)
+				/// Applies the following styles to 1st level headings (Article titles) across the site
+				.user-css h1,
+				.user.css-extended h1 {
+					
+					/// Extends the heading style
+					@extend %styles_Headings;
+					
+					/// Scales the text to be 4 levels larger than the normal text size
+					font-size: scaleText(4);
+					
+					/// Forces the text to be center alligned within its container (overrides the existing align left rule)
+					text-align: center !important;
+					
+					/// Sets empty spacing around the heading to equal the pre-defined heading spacing.
+					padding: map.get($design, "Remove Space");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any padding from the heading
+					margin: map.get($design, "Remove Space");
+					
+				}
+				
+				
+			// Article Subheading (If Applicable)
+				/// Applies the following rules to the article subtitle if one is present
+				.article-title h4 {
+				
+				/// Extends the heading style
+					@extend %styles_Body;
+					
+					/// Scales the text to be 1 level larger than the normal text size
+					font-size: scaleText(1);
+					
+					/// Sets the color to be the primary text color
+					color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+					
+					/// Sets the text to be left aligned
+					text-align: left;
+					
+					/// Removes any padding from the heading
+					padding: 0.5em 0em 0em 0em;
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any margins from the heading
+					margin: map.get($design, "Remove Space");
+				
+				}
+			
+			
+			.article-title-author {
+				
+				@extend %styles_Decorative;
+					
+					/// Scales the text to be 1 level larger than the normal text size
+					font-size: scaleText(2);
+					
+					/// Sets the color to be the primary text color
+					color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha"));
+					
+					/// Sets the text to be left aligned
+					text-align: center;
+					
+					/// Removes any padding from the heading
+					padding: map.get($design, "Heading Padding");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any margins from the heading
+					margin: map.get($design, "Remove Space");
+				
+			}
+			
+			
+			// H2 (BBCode H1 Headings)
+				/// Applies the following formatting to the 2nd level headings
+				.user-css h2,
+				.user-css-extended h2 {
+					
+					/// Extends the heading style
+					@extend %styles_Headings;
+					
+					/// Scales the text to be 4 levels larger than the normal text size
+					font-size: scaleText(3);
+					
+					/// Sets the text to be left aligned
+					text-align: left;
+					
+					/// Sets empty spacing around the heading to equal the pre-defined heading spacing.
+					padding: map.get($design, "Heading Padding");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any padding from the heading
+					margin: map.get($design, "Remove Space");
+					
+				}
+				
+				
+			// H3 (BBCode H2 Headings)
+				/// Applies the following formatting to the 3rd level headings
+				.user-css h3,
+				.user-css-extended h3 {
+					
+					/// Extends the heading style
+					@extend %styles_Headings;
+					
+					/// Scales the text to be 4 levels larger than the normal text size
+					font-size: scaleText(2);
+					
+					/// Sets the text to be left aligned
+					text-align: left;
+					
+					/// Sets empty spacing around the heading to equal the pre-defined heading spacing.
+					padding: map.get($design, "Heading Padding");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any padding from the heading
+					margin: map.get($design, "Remove Space");
+					
+				}
+			
+			
+			// H4 (BBCode H3 Headings)
+				/// Applies the following formatting to the 4th level headings
+				.user-css h4,
+				.user-css-extended h4 {
+					
+					/// Extends the heading style
+					@extend %styles_Headings;
+					
+					/// Scales the text to be 4 levels larger than the normal text size
+					font-size: scaleText(1);
+					
+					/// Sets the text to be left aligned
+					text-align: left;
+					
+					/// Sets empty spacing around the heading to equal the pre-defined heading spacing.
+					padding: map.get($design, "Heading Padding");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any padding from the heading
+					margin: map.get($design, "Remove Space");
+					
+				}
+			
+			
+			// H5 (BBCode H4 Headings)
+				/// Applies the following formatting to the 5th level headings
+				.user-css h5,
+				.user-css-extended h5 {
+					
+					/// Extends the heading style
+					@extend %styles_Headings;
+					
+					/// Scales the text to be 4 levels larger than the normal text size
+					font-size: scaleText(0);
+					
+					/// Forces the text to be center alligned within its container (overrides the existing align left rule)
+					text-align: center !important;
+					
+					/// Sets empty spacing around the heading to equal the pre-defined heading spacing.
+					padding: map.get($design, "Heading Padding");
+					
+					/// Removes any border from the heading
+					border-width: map.get($design, "Remove Space");
+					
+					/// Removes any padding from the heading
+					margin: map.get($design, "Remove Space");
+					
+				}
+		
+		
+		// Article Body
+			// Paragraph and general text
+				/// Sets the following formatting for all paragraph and otherwise unformatted text.
+				.user-css,
+				.user-css-extended,
+				.user-css p,
+				.user-css-extended p {
+					
+					/// Extends the body formatting styles
+					@extend %styles_Body;
+					
+					/// Sets the text alignment to be justified left
+					/// Note that by default the last line is aligned left not justified left by default
+					text-align: justify;
+					
+				}
+			
+			
+			// Bold & Strong Styles
+				/// Sets the following styles for both the bold and strong styles so that they have the same formatting.
+				.user-css b,
+				.user-css-extended b,
+				.user-css strong,
+				.user-css-extended strong {
+					
+					/// Extends the styles of the Decorative placeholder class
+					@extend %styles_Decorative;
+					
+					/// Sets the text to inherit from the parent container.
+					font-size: inherit;
+					
+					/// Ensures that any color applied to the parent element is inherited by the bold element
+					color: inherit;
+					
+				}
+			
+			
+			// Italicised
+				/// Sets the following styles for italicised styles
+				/// In a situation where bold text is italicised, the bold font family is italicised and not replaced by the italic body style.
+				.user-css em,
+				.user-css-extended em {
+					
+					/// Declares the style to be italicised
+					font-style: italic;
+					
+					/// Extends the styles of the Body + Italic placeholder class
+					@extend %styles_BodyItalic;
+					
+					/// Ensures that the color of the text is inherited from its parent element.
+					/// This is done to ensure that if text is highlighted plus this style, it retains the highlighting.
+					/// This may not be strictly nessecery but stated in the style out of an abundance of caution.
+					color: inherit;
+					
+					/// Ensures that the size of the text is inherited from its parent element.
+					/// It is done to make sure that if a span of text has the small style plus this style, it retains the smaller text size.
+					/// This may not be strictly nessecery but stated in the style out of an abundance of caution.
+					font-size: inherit;
+					
+				}
+			
+			// Underlined
+				/// Sets the following styles for underlined text.
+				.user-css u,
+				.user-css-extended u {
+					
+					/// Ensures that the font family is inherited from the parent element
+					font-family: inherit;
+					
+					/// Ensures that the color of the text is inherited
+					color: inherit;
+					
+					/// Ensures that the decoration applied to the text by this style is underlined
+					text-decoration: underline;
+					
+					/// Sets the thickness of the underline to be that of the pre-defined line thickness as declared in the Design map.
+					text-decoration-line: map.get($design, "Line Thickness");
+					
+					/// Ensures that the color of the underline is inherited from the parent element.
+					/// This is so that if a text is colored red, the underline should also be red.
+					/// If you would like the underline color to be a specific color, change the definition here.
+					text-decoration-color: map.get($text, "Primary Color");
+					
+				}
+				
+			
+			// Superscripts and Subscripts
+				/// Sets the following styles for both the superscript and subscript styles as both require the same setup before other changes are applied.
+				.user-css sub,
+				.user-css sup {
+					
+					/// Sets the position of the two styles to be positioned relative to the container they are in.
+					position: relative;
+					
+					/// Makes both styles 25% smaller than its parent text
+					font-size: 75%;
+					
+					/// Makes the line height of the text 0
+					line-height: 0;
+					
+					/// Sets the vertical alignmnent relative to the text baseline (the bottom of most letters like v that do not go below the imaginary baseline.)
+					vertical-align: baseline;
+					
+				}
+				
+				
+				/// Sets the following styles for only subscripted text
+				.user-css sub {
+					
+					/// Moves the subscript below the baseline by 25% of the text height.
+					bottom: -0.25em;
+					
+				}
+				
+				
+				/// Sets the following styles for superscripted text only
+				.user-css sup {
+					
+					/// Moves the superscript below the ascender (highest part of glyphs) by 25% of the text height.
+					top: -0.25em;
+					
+				}
+			
+			
+			// Struckthrough Text
+				/// Applies the following styles for text that is stricken (a line through their center along the x-height.)
+				.user-css del {
+					
+					/// Sets the decoration applied to the text to be a line through the text along the x-height.
+					text-decoration: line-through;
+					
+					/// Sets the thickness of the decorative line to be the same as other line elements
+					text-decoration-line: map.get($design, "Line Thickness");
+					
+					/// Changes the color of the decorative line
+					text-decoration-color: map.get($text, "Primary Color");
+					
+				}
+			
+			
+			// Small
+				/// Applies the following styles for text that is made small
+				.user-css small {
+					
+					/// Sets the text size to be 25% smaller than the normal font size
+					font-size: 75%;
+					
+				}
+			
+			
+			// Smallcaps
+				/// Applies the following styles for text that has the custom smallcaps attribute
+				/// This leaves uppercase letters tall, capitalized letters while changing lowercase letters to be shorter, capital letters.
+				.smallcaps {
+					
+					/// Sets the font features to turn on then force smallcaps.
+					font-variant: small-caps;
+					
+				}
+			
+			
+			// Marked (Highlighted)
+				/// Applies the following styles for text that is has the mark attribute (highlighted.)
+				.user-css mark {
+					
+					/// Sets the background color of marked text
+					background-color: color.change(map.get($themeColors, "Tertiary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following styles for text that has the custom mark2 attribute
+				.mark2 {
+					
+					/// Sets the background color of the marked text
+					background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following styles for text that has the custom mark3 attribute
+				.mark3 {
+					
+					/// Sets the background color of the marked text
+					background-color: color.change(map.get($themeColors, "Secondary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following styles for text that has the custom mark4 attribute
+				.mark4 {
+					
+					/// Sets the background color of the marked text
+					background-color: color.change(map.get($themeColors, "Quaternary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following styles for text that has the custom mark5 attribute
+				.mark5 {
+					
+					/// Sets the background color of the marked text
+					background-color: color.change(map.get($themeColors, "Quinary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following styles for text that has the custom mark6 attribute
+				.mark6 {
+					
+					/// Sets the background color of the marked text
+					background-color: color.change(map.get($themeColors, "Senary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+			
+			
+			// Links
+				/// Applies the following formatting to URL linked text when it is not being hovered over on the page
+				.user-css a,
+				.user-css a:focus,
+				.user-css-extended a,
+				.user-css-extended a:focus {
+					
+					/// Forces the color of links to be inherited from its parent class
+					/// This is done to make the color of links the same as the surrounding text.
+					color: inherit;
+					
+					/// Forces links to inherit the font of its parent class so that it will be the same as the surrounding text.
+					font-family: inherit;
+					
+					/// Sets the links to be decorated with an underlined style
+					text-decoration: underline;
+					
+					/// Calculates the line thickness to be 1/2 of the normal line thickness (because there are two paralell lines)
+					text-decoration-thickness: calc(map.get($design, "Line Thickness") / 2);
+					
+					/// Changes the underline style to be double to set it apart from normally underlined text.
+					text-decoration-style: double;
+					
+				}
+				
+				
+				.user-css a:hover,
+				.user-css-extended a:hover {
+					
+					/// 
+					color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+			
+			
+			// Quotes
+				/// The following styles are applied to the blockquote box and the quote itself
+					.user-css blockquote {
+						
+						/// The quoted text extends the body text style
+						@extend %styles_Body;
+						
+						///
+						background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 3"));
+						
+						/// Applies a padding of 2ems on all sides outside of the quote but inside the background essentially creating colored space within the 'box.'
+						padding: 2em;
+						
+						/// Places blank space left and right of the box to 'inset' it from the right and left margins of text.
+						/// Typically block quotes are indented in from both sides by a decent amount to call it out as a lenghy span of quoted text.
+						margin: 0em 2em 0em 2em;
+						
+						/// Creates a boarder of the following thickness, color and style on the left side of the quote box
+						border-left: 2em map.get($themeColors, "Primary") solid;
+						
+						/// Sets the font size of the quoted text
+						font-size: 1.2em;
+						
+						/// Changes the line height of the quoted text
+						line-height: 1.5em;
+						
+					}
+				
+				
+				/// The following styles are applied to the quote author portion of a blockquote
+				.user-css blockquote .author {
+					
+					/// Sets the author attribution to be a block within the quote box
+					display: block;
+					
+					/// Aligns the author to the right of the box
+					text-align: right;
+					
+					/// The author attribution extends the decorative style
+					@extend %styles_Decorative;
+					
+				}
+			
+			
+			// Spoiler
+				/// Sets the following styles for the in-line spoilers button before it is clicked.
+				.user-css .spoiler-button {
+					
+					/// Changes the button color to be the Primary instead of the normal button color
+					background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+					/// The spoiler label extends the body styles text
+					@extend %styles_Body;
+					
+				}
+				
+				
+				/// Sets the following styles for the in-line spoilers button when it is being hovered over with the cursor
+				.user-css .spoiler-button:hover {
+					
+					/// Changes the alpha (opacity) of the spoiler button to 2 steps less opaque then the unhovered style
+					background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha + 3"));
+					
+				}
+				
+				
+				/// Sets the following styles for the expanded spoilers card (box) after the user clicks on the spoiler button.
+				.spoiler-card {
+					
+					/// Sets the border to a more opaque version of the background
+					border-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha + 2"));
+					
+					/// Sets the background color to a less opaque version of the primary theme color
+					background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+			
+			
+			// Inline spoilers
+				/// Sets the following styles for my custom inline spoilers style
+				/// This style (along with its partner style, on hover, below) hides text until it is hovered over when it is revealed.
+				/// This hides a spoiler until the user hovers over it and thus reveals the spoiler.
+				/// It can also be used as a pseudo-redaction that is revealed to the viewer
+				.inlineSpoiler {
+					
+					/// Ensures that the spoiler is an in-line block and acts as one
+					/// This makes it so that hovering over part of the block counts as hovering over sub-elements like links that may be contained within thus revealing them
+					display: inline-block;
+					
+					/// Adds extra padding (black space) on all sides of the text.
+					/// This prevents elements like superscripts and letter decenders from sticking out of the redaction.
+					/// It also adds some space before and after the text to make it look more pleasing to the reader when revealed.
+					padding: 0.25em 0.5em 0.25em 0.5em;
+					
+					/// Sets the background color to a completely opaque (at least visually) inky black while preserving the text (which is actually above it.)
+					background-color: color.change(map.get($text, "Primary Color"), $alpha: 1.00);
+					
+				}
+				
+				
+				/// Sets the following styles text that could be contained within a spoiler style
+				.inlineSpoiler a,
+				.inlineSpoiler a:focus
+				.inlineSpoiler * {
+					
+					/// Removes any background elements (like colors) that could be applied to text contained by a spiler
+					background: none;
+					
+					/// Sets the color to be the Primary
+					/// This is done so that links don't stand out (and are visible)
+					color: map.get($text, "Primary Color") !important;
+					
+					/// Removes the text shadow effect that may be applied to links
+					text-shadow: none;
+					
+				}
+			
+			
+				/// Sets the following styles for inline spoilers when the user hovers over them with their cursor.
+				/// This effect should reveal the content to the viewer.
+				.inlineSpoiler:hover {
+					
+					/// Fades the background to three steps below the normal alpha to reveal the spoiler text.
+					background-color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha - 3"));
+					
+				}
+			
+			
+			// Revokable Redaction
+				/// The following styles are for inline redactions
+				/// 
+				.revokableRedaction {
+					
+					/// Ensures that the redaction is an in-line block and acts as one
+					/// This makes it so that hovering over part of the block counts as hovering over sub-elements like links that may be contained within thus revealing them
+					display: inline-block;
+					
+					/// Adds extra padding (black space) on all sides of the text.
+					/// This prevents elements like superscripts and letter decenders from sticking out of the redaction.
+					/// It also adds some space before and after the text to make it look more pleasing to the reader when revealed.
+					padding: 0.25em 0.5em 0.25em 0.5em;
+					
+					/// Sets the background color to a completely opaque (at least visually) inky black while preserving the text (which is actually above it.)
+					background-color: color.change(map.get($text, "Primary Color"), $alpha: 1.00);
+					
+					/// Makes it so the user can't select the text including the individual characters.
+					/// This makes it harder to see the content below but not impossible. Screen-readers can still select and read this text.
+					user-select: none;
+					
+				}
+			
+			
+			// Lists
+				/// Applies the following formatting to all list styles (ordered and unordered)
+				.user-css ol,
+				.user-css ul,
+				.user-css li {
+					
+					/// Allows lists to inherit the font of the parent class
+					font-family: inherit;
+					
+					/// Places the list icons inside the list box
+					/// This means that calculations like line width include the bullet in the measurement.
+					/// I also think it makes a more visually consistent style
+					list-style-position: inside;
+					
+					/// Allows the color of list items to be inherited from its parent element.
+					color: inherit;
+					
+				}
+				
+				
+				/// Applies the following formatting to list elements of both list types
+					.user-css ol li,
+					.user-css ul li {
+						
+						/// Adds blank space below each element to create seperation between items
+						padding-bottom: 0.1em;
+						
+					}
+				
+				
+				// Ordered Lists (ol)
+					/// Applies the following formatting to ordered lists only (ie 1, 2, 3, 4, 5...) which occur in articles
+					.user-css .article-content-left ol {
+						
+						/// Applies decimal numbering to ordered lists (ie 1, 2, 3, etc)
+						list-style-type: decimal;
+						
+					}
+					
+					
+				// Unordered Lists (ul)
+					/// Applies the following formatting to the elements contained by the unordered lists.
+					.user-css .article-content-left ul {
+						
+						/// Adds filled disks (bullet points) to unordered lists
+						list-style-type: disc;
+						
+					}
+					
+					
+				// Lists in Sidebars
+					/// Applies the following formatting to lists which occur in the right sidebar of the article
+					.user-css .article-content-right ul,
+					.user-css .article-content-right ol {
+						
+						/// Removes list styles from lists which appear in the the article sidebar
+						list-style-type: none;
+						
+					}
+					
+					
+					/// Applies the following formatting to list elements which occur in the right sidebar of the article
+					.user-css .article-content-right ul li,
+					.user-css .article-content-right ol li {
+						
+						/// Removes any spacing around list elements
+						padding: map.get($design, "Remove Space");
+						
+						/// Removes any spacing around list elements
+						margin: map.get($design, "Remove Space");
+						
+					}
+			
+			
+			// Checkboxes
+				/// Applies the following formatting to the icon which appears before empty checkboxes
+				.user-css .checkbox-empty::before {
+					
+					/// Sets the color to the primary text color
+					color: map.get($text, "Primary Color");
+					
+				}
+				
+				
+				/// Applies the following formatting to the icon which appears before checked checkboxes
+				.user-css .checkbox-checked::before {
+					
+					/// Sets the color to dark green (independent of theme color)
+					color: color.change(darkgreen, $alpha: map.get($themeColors, "Alpha - 2" ));
+					
+				}
+				
+				
+				/// Applies the following formatting to the icon which appears before x-ed or times checkboxes
+				.user-css .checkbox-times::before {
+					
+					/// Sets the color to dark red (independent of color theme)
+					color: color.change(darkred, $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following formatting to the icon which appears before right and left checkboxes
+				.user-css .checkbox-chevron::before {
+					
+					/// Sets the color to steel blue (independent of color theme)
+					color: color.change(steelblue, $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following formatting to the icon which appears before plus checkboxes
+				.user-css .checkbox-plus::before {
+					
+					/// Sets the color to lime green (independent of color theme)
+					color: color.change(limegreen, $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+				
+				
+				/// Applies the following formatting to the icon which appears before minus checkboxes
+				.user-css .checkbox-minus::before {
+					
+					/// Sets the color to orange-red (independent of color theme)
+					color: color.change(orangered, $alpha: map.get($themeColors, "Alpha - 2"));
+					
+				}
+			
+			
+			// Horizontal rule (divider line)
+				/// Applies the following styles to horizontal dividers [hr] elements in text
+				.user-css hr {
+					
+					/// Sets the opacity of the line to 100% before other changes are applied
+					opacity: map.get($themeColors, "Alpha - 1");
+					
+					/// Sets the thickness of the divider to the thickness specified by the line thickness in the Design map
+					height: map.get($design, "Line Thickness");
+					
+					/// Sets the color of the divider to the theme's Primary
+					background-color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha - 1")) !important;
+					
+				}
+			
+			
+			// Auto-numbered footnotes
+				/* The following styles when used together form an auto-numbered footnote system. Instead of assigning footnotes a static number, the CSS creates the numbering as they appear on the page.
+				If a user clicks on an inline footnote marker, it should scroll them down to the corresponding entry in the footnotes section. Likewise, if the user clicks on the number at the start of the footnote entry, it should scroll them up to the point in the article where that footnote is marked.
+				To use this in your BBCOde you have to include the following (replacing the prompts between the two angled brackets < > with your values):
+					For Footnote Markers: [anchor|<Unique Identifier>][url=#<Destination UUID>][section: footnotes_Inline_Format].[/section][/url]
+					For Footnote Entries: [anchor|<Unique ID>][url=#<Destination UUID>][section: footnotes_Entries_Format]:[/section][/url] <Footnote Entry Text>
+					You must also add the following BBCode to the container where your footnote entries will appear: 
+						[container: setFootnotesCounter] [/container]
+					This is required for the footnote entries counter to work properly and not override other counters. Also note that there is a space between the start and end of the container which is required for the BBCode to render and not be ignored by the site.
+				Make sure you keep the # in the URL, it denotes that the URL is within the article and not an external URL.
+				Terminology Note: 
+					- Footnote Marker describes the inline, superscripted numbers that appear in the article.
+					- Footnote Entry describes the text that accompanies that marker and is typically found at the bottom of the article.  */
+		
+					// In-Line Footnotes 
+						/// Stipulates that the article will contain a counter called Inline Counter which will be reset with every new article content
+						/// This forms the running counter that is used to count and denote the in-line footnotes. 
+						.user-css .article-content {
+							
+							/// The following code creates the counter for the article’s inline footnotes 
+							counter-reset: footnotes_Inline_Counter;
+							
+						}
+					
+					
+						/// The following stipulates the format for the Footnote Markers (Inline Footnote Numbers) 
+						.footnotes_Inline_Format {
+							
+							/// This style extends the body text formatting
+							@extend %styles_Body;
+							
+							/// Stipulates that the text is positioned to be relative (instead of fixed, sticky or absolute)
+							position: relative;
+							
+							/// Stipulates that the text will be vertically positioned to the text's baseline so that if the font size or font faces change, the footnote will reposition accordingly.
+							vertical-align: baseline;
+							
+							/// Stipulates that the font will be 25% smaller than the normal text size.
+							font-size: 75%; 
+							
+							/// Stipulates that the text will be 0.25 ems below the highest ascender in the line of text.
+							top:  -0.25em;
+							
+							/// Stipulates that there will be no text decoration like underlining
+							text-decoration: none;
+							
+							/// Stipulates that the color of the footnote will be inherited from its parent class (so that it matches the span of text around it)
+							color: inherit;
+							
+							/// Stipulates that the cursor will pass over the footnote with the same style as in-line text.
+							cursor: default;
+							
+						}
+						
+						
+						/// Stipulates the prefix that is added to footnotes (i.e. the footnote number)
+						.footnotes_Inline_Format::before {
+							
+							/// Stipulates that when this style is encountered, 1 is added to the inline footnotes counter.
+							/// The counter starts at 0 by default. When it reaches the first footnote, it will be marked as 1. Then 2 and so on until all notes are accounted for.
+							counter-increment: footnotes_Inline_Counter;
+							
+							/// Stipulates that the prefix will contain the value of the inline footnotes counter at the time it was encountered.
+							content: counter(footnotes_Inline_Counter);
+							
+						}
+					
+					
+					// Footnote Entries 
+						/// Stipulates that the article will contain a counter called Inline Counter which will be reset with every new article content  
+						.setFootnotesCounter {
+							
+							/// Stipulates the creation of a new counter called Footnotes Entry Counter and sets the initial value to 0. 
+							counter-reset: footnotes_Entry_Counter;
+							
+						}
+						
+						/// Stipulates the formatting for footnote entry numbers
+						.footnotes_Entries_Format {
+							
+							/// This style extends the body text formatting 
+							@extend %styles_Body;
+							
+						}
+						
+						/// Stipulates that the BBCode will be prefixed with the following formatting
+						.footnotes_Entries_Format::before {
+							
+							/// Stipulates that the footnote entry counter is incrimented by 1 when an instance of the style is encountered
+							counter-increment: footnotes_Entry_Counter;
+							
+							/// Adds the current value of the footnote entry counter to the content of this style.
+							content: counter(footnotes_Entry_Counter);
+							
+						}
+			
+			
+			// Tooltips, Variables & Linked Articles
+				/// Applies the following formatting to tooptips and tooltip-like data (variables and article links) before they are hovered over
+				/// This formatting is essentially how it appears on the page without any interaction.
+				.user-css-presentation .text-abbreviation {
+					
+					/// Extends the Inheritor Class which stipulates that most styling is inherited from its parent in the display hierarchy
+					@include InheritorManager($all:true);
+					
+					/// Stipulates that the display must be inline (not block or inline block.)
+					display: inline;
+					
+					/// Sets the style to be underlined
+					text-decoration: underline;
+					
+					/// Changes the underline style to be dotted (instead of solid)
+					/// This is done mainly do differentiate it from true underlines (u) and links (double underlined.)
+					text-decoration-style: dotted;
+					
+					/// Stipulates that the decoration color is inherited
+					text-decoration-color: inherit;
+					
+					/// Sets the dotted line thickness to be the universal line thickness
+					text-decoration-thickness: map.get($design, "Line Thickness");
+					
+				}
+				
+				
+				/// Applies the following styles to the arrow which appears at the bottom of the tooltip box as an indicator as to what the box refers to.
+				.user-css-presentation .tooltipster-base .tooltipster-arrow .tooltipster-arrow-border {
+					
+					/// Sets the border color to be the theme's Primary
+					border-top-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+				
+				
+				.user-css-presentation .tooltipster-base .tooltipster-arrow .tooltipster-arrow-border {
+					
+					/// Sets the border color to be the theme's Primary
+					border-left-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+				
+				
+				.user-css-presentation .tooltipster-base .tooltipster-arrow .tooltipster-arrow-border {
+					
+					/// Sets the border color to be the theme's Primary
+					border-bottom-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+				
+				
+				.user-css-presentation .tooltipster-base .tooltipster-arrow .tooltipster-arrow-border {
+					
+					/// Sets the border color to be the theme's Primary
+					border-right-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha"));
+					
+				}
+				
+				
+				/// Applies the following formatting to the card (box) that appears when a tooltip is hovered over
+				.user-css-presentation .tooltipster-base .tooltipster-box {
+					
+					/// Sets the background to be same as the page background
+					background: map.get($design, "Page Background");
+					
+					/// Stipulates that the border will be the same as the primary text color
+					border-color: map.get($text, "Primary Color");
+					
+					/// Stipulates that the border will be the same thickness as other line elements
+					border-width: map.get($design, "Line Thickness");
+					
+					/// Allows the browser to recalculate the height that the tooltip should be
+					height: auto;
+					
+					/// Allows the browser to recalculate the width that the tooltip should be
+					width: auto;
+					
+					/// Stipulates that the tooltip will have a shadow produced from two light sources of the following size, color and diffusion.
+					box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+					
+				}
+				
+				
+				/// Applies the following formatting to the text within the tooltip
+				.user-css-presentation .tooltipster-base * {
+					
+					/// Conditionally stipulates that the tooltip will inherit the text and font formatting from higher levels.
+					@include InheritorManager($font:true, $text:true);
+					
+				}
+			
+			
+			// Tables
+				// Responsive Table Container
+					/// The following style declares the responsive table custom style
+					/// It is a wrapper style for tables (meant to be declared as a container then have a table outlined in BBCode within it)
+					/// The intent of this container is to allow the table to scroll on both axies if it is larger than the viewing container. So if a table is too large it will show scroll bars and allow the user to scroll to see more information. This is not the default behavior for tables in World Anvil; tables are by default resized smaller and smaller if their horizontal length is too long or will extend endlessly down the page if their height is too long.
+					/// I have chosen values that I think look good on my device but these may need to be changed depending on target platform or user feedback.
+					/// This does not apply any stylistic details to the tables beyond how the table is formatted and how overflow is handled.
+					.responsiveTable {
+						
+						/// Stipulates that tables should be layed out using the fixed algorithim instead of the auto.
+						/// This may be a matter of personal preference but I like the columns to have equal widths.
+						/// If the columns are too large for the viewable area then it should scroll
+						table-layout: fixed;
+						
+						/// Stipulates that the table may only take up 75% of the total screen height
+						/// This is browser and device independent.
+						max-height: 75vh;
+						
+						/// Stipulates that the table must try to fill up the width of the container
+						width: 100%;
+						
+						/// Stipulates that if the table is too wide for the visual container, then the overflow should be handled by scrolling (as opposed to resizing or truncating)
+						overflow-x: scroll;
+						
+						/// Stipulates that if the table is too long for the visual container, then the overflow should be handled by scrolling (as opposed to resizing or truncating)
+						overflow-y: scroll;
+						
+					}
+					
+					
+					/// The following code stipulates the formatting for tables within the responsive table format
+					.responsiveTable table {
+						
+						/// Stipulates that the table layout should be fixed (out of an abundance of caution)
+						table-layout: fixed !important;
+						
+						/// Stipulates that the x-overflow should be handled by scrolling (out of an abundance of caution)
+						overflow-x: scroll !important;
+						
+					}
+					
+					
+					/// The following style stipulates the styles applied to all elements of tables within the responsive table
+					.responsiveTable table * {
+						
+						/// Stipulates that the minimum cell-size will be 10% of the screen width
+						min-width: 10vw !important;
+						
+						/// Stipulates that the width should attempt to be 14.5% of the screen with
+						/// For me, this allowed four columns to be displayed before scrolling was needed.
+						width: 14.5vw !important;
+						
+						/// Stipulates that the max width of the cells should be 20% of the screen width
+						max-width: 20vw !important;
+						
+					}
+					
+					
+				// X-Axis Only Responsive Tables
+					/// The following formatting declares the Responsive X table container
+					/// This style is similar to the normal container except that it only cares about x-axis overlow and not y-axis.
+					/// This means that a table can render all the way down the page until it reaches its natural end allowing the user to scroll down the page not inside of the container.
+					/// Overflow along the x-axis is handled the same as the Responsive Table style.
+					.responsiveXAxisTable {
+						
+						/// Stipulates that tables should be layed out using the fixed algorithim instead of the auto.
+						/// This may be a matter of personal preference but I like the columns to have equal widths.
+						/// If the columns are too large for the viewable area then it should scroll
+						table-layout: fixed;
+						
+						/// Stipulates that if the table is too wide for the visual container, then the overflow should be handled by scrolling (as opposed to resizing or truncating)
+						overflow-x: scroll;
+						
+					}
+				
+				
+					/// The following code stipulates the formatting for tables within the responsive table format
+					.responsiveXAxisTable table {
+						
+						/// Stipulates that the table layout should be fixed (out of an abundance of caution)
+						table-layout: fixed !important;
+						
+						/// Stipulates that the x-overflow should be handled by scrolling (out of an abundance of caution)
+						overflow-x: scroll !important;
+						
+					}
+					
+					
+					/// The following style stipulates the styles applied to all elements of tables within the responsive table
+					.responsiveXAxisTable table * {
+						
+						/// Stipulates that the minimum cell-size will be 10% of the screen width
+						min-width: 10vw !important;
+						
+						/// Stipulates that the width should attempt to be 14.5% of the screen with
+						/// For me, this allowed four columns to be displayed before scrolling was needed.
+						width: 14.5vw !important;
+						
+						/// Stipulates that the max width of the cells should be 20% of the screen width
+						max-width: 20vw !important;
+						
+					}
+					
+				
+				
+				// Y-Axis Only Responsive Tables
+					/// The following style stipulates the styles applied to responsive y-axis tables.
+					.responsiveYAxisTable {
+						
+						/// Stipulates that tables should be layed out using the fixed algorithim instead of the auto.
+						/// This may be a matter of personal preference but I like the columns to have equal widths.
+						/// If the columns are too large for the viewable area then it should scroll
+						table-layout: fixed;
+						
+						/// Stipulates that if the table is too long for the visual container, then the overflow should be handled by scrolling (as opposed to resizing or truncating)
+						overflow-y: scroll;
+						
+						/// Stipulates that the table may only take up 75% of the total screen height
+						/// This is browser and device independent.
+						max-height: 75vh;
+						
+					}
+				
+				
+				// Thematic Coloring
+					/// The following code stipulates styles for table header rows
+					.user-css .table-striped th {
+						
+						/// This style extends the decorative text class
+						@extend %styles_Decorative;
+						
+						/// This style sets the background color to be the primary theme color with an alpha 2 steps below the normal level.
+						/// The lower alpha I think makes it easier to read and keeps with the visual style better than a more opaque value but it is my personal preference.
+						background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 2"));
+						
+					}
+					
+					
+					/// The following stipulates the styles for the even-numbered rows (row 2, row 4, etc)
+					.user-css .table-striped tr:nth-child(even) {
+						
+						/// This style extends the body text class
+						@extend %styles_Body;
+						
+						/// The background for this row is the same as the secondary text color (an off-white color) at a saturation of 3 steps below the normal level.
+						/// I think this faded or washed color looks good, is easy to read and keeps with the theeme.
+						/// I also tried it without a background and it looked incomplete.
+						background-color: color.change(map.get($text, "Secondary Color"), $alpha: map.get($themeColors, "Alpha - 3"));
+						
+					}
+					
+					
+					/// The following stipulates the styles for odd-numbered rows (1, 3, etc)
+					.user-css .table-striped tr:nth-child(odd) {
+						
+						/// This style extends the body text class
+						@extend %styles_Body;
+						
+						/// The background for this row is the same as the primary theme color with an alpha of three steps below the default.
+						/// I think this faded or washed color looks good, is easy to read and keeps with the theeme.
+						background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 3"));
+						
+					}
+				
+				
+				// Old-Style Table
+					/// The following stipulates the formatting for all tables whithin a Old Style Table class container
+					.oldStyleTable table {
+						
+						/// Stipulates that the table must use a fixed layout
+						table-layout: fixed;
+						
+					}
+					
+					
+					/// Stipulates the style for all sub-elements of tables within the Old Style Table class
+					.oldStyleTable table * {
+						
+						/// Forces any background behind cells to be removed
+						background: none !important;
+						
+						/// Stipulates that there will be no box shadow behind any table element
+						box-shadow: none;
+					}
+					
+					
+					/// Stipulates the formatting for all table heading cells (remember these are not rows but individual cells)
+					.oldStyleTable table th {
+						
+						/// Forces the text to be alligned to the bottom of the cell
+						vertical-align: bottom !important;
+						
+						/// Forces a border with the following styles to appear below all header cells
+						border-bottom: map.get($design, "Line Thickness") solid map.get($text, "Primary Color") !important;
+						
+					}
+					
+					
+					/// Stipulates the following formatting for all table data (body) cells within an Old Style Table
+					.oldStyleTable table td {
+						
+						/// Forces the text to be aligned at the top of the cell
+						/// I did this because it feels more natural for a handwritten table like this is supposed to be
+						vertical-align: top !important;
+						
+						/// Forces a border with the following styles to appear below all body cells.
+						/// I chose a value of 1pt reguardless of design elements as it looks the most authentic and would look wierd otherwise.
+						border-bottom: 1pt dotted map.get($text, "Primary Color") !important;
+						
+					}
+			
+			
+		// Footer Elements
+			// Footnotes
+				/// The following style stipulates the formatting for the footnote box which contains the column-width footnotes
+				/// The intent of these changes is to make the footnotes look like they are part if the page
+				.user-css.article-footnotes {
+					
+					/// Stipulates a removal of the default background
+					background: none;
+					
+					/// Stipulates the removal of any box shadow
+					box-shadow: none;
+					
+				}
+			
+			// Comments
+				/// The following code stipulates the styles for the comments heading which appears on the page by default
+				#comments h2 {
+					
+					/// Stipulates that the text will extend the headings style
+					@extend %styles_Headings;
+					
+					/// Stipulates that the text should be scaled three levels above the default text size (to be consistent with the in-line H2 headings)
+					font-size: scaleText(3);
+					
+					/// Forces the heading to be center-aligned (to match the alignment of other such elements like the page title and the position of the comment box on the page)
+					text-align: center !important;
+					
+				}
+				
+				
+				#comments h4 {
+					
+					/// Stipulates that the text will extend the headings style
+					@extend %styles_Headings;
+					
+					/// Stipulates that the text should be scaled 1 level above the default text size (to be consistent with the in-line h4 headings)
+					font-size: scaleText(1);
+					
+					/// Forces the heading to be center-aligned (to match the alignment of other such elements like the page title and the position of the comment box on the page)
+					text-align: center !important;
+					
+				}
+				
+				
+				//// The following stipulates the styles of the author's note body text
+				#comments em,
+				#comments p {
+					
+					/// Stipulates that the text will use the italic style.
+					@extend %styles_BodyItalic;
+					
+					/// Forces the text to be justified left instead of the default centered
+					text-align: justify !important;
+					
+				}
+					
+				/// The following stupulates the styling of the general comments which can be left at the bottom of the page
+				.user-css-extended #comments {
+					
+					/// Stipulates that the text will use the body style
+					@extend %styles_Body;
+					
+				}
+				
+				
+				/// The following stipulates the styling of the comments box
+				#comments {
+					
+					/// Forces the removal of the solid box behind the comments section
+					background: none !important;
+					
+					/// Forces the removal of the shadow produced by the comment box
+					box-shadow: none !important;
+					
+				}
+			
+			
+			// Metadata
+				/// The following stipulates the style of the boxes which contain the article's metadata, secrets, individual secret enteries and content trees
+				#metadata,
+				#secrets,
+				#secrets div,
+				#peripheral-content div {
+					
+					/// Stipulates the removal of the default background
+					background: none;
+					
+					/// Stipulates the removal of the default box shadow
+					box-shadow: none;
+					
+				}
+				
+				
+				/// The following stipulates the styling of metadata items which appear at the bottom of every page.
+				.user-css-extended #peripheral-content, 
+				.user-css-extended #peripheral-content a, 
+				.user-css-extended #peripheral-content a:hover, 
+				.user-css-extended #peripheral-content .text-danger {
+					
+					/// Metadata text extends the body text style
+					@extend %styles_Body;
+					
+				}
+				
+				
+				/// The following style stipulates the formatting of entries in organization trees which can appear at the bottom of the page.
+				.orgtreewrapper a {
+					
+					/// Stipulates that the background color of the entries will be the primary theme color with an alpha of 2 steps below the default
+					background-color: color.change(map.get($themeColors, "Primary"), $alpha: map.get($themeColors, "Alpha - 2")) !important;
+					
+				}
+				
+				
+				/// The following stipulates the format of the small text which appears within the secrets container
+				#secrets small {
+					
+					/// Stipulates that the text will be similar to the body text
+					color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha")) !important;
+					
+				}
+				
+				
+				
+		
+		// Navigation Elements
+			// Right Sidebar
+				/// Applies the following styles to the right sidebar panel
+				.user-css .panel {
+					
+					/// Removes any background that could be present as a background
+					background: none;
+					
+					/// Removes all borders around the panel except the left border which is set to the thickness of the default line thickness
+					border-width: 0pt 0pt 0pt map.get($design, "Line Thickness");
+					
+					/// Sets the left border to the following color
+					border-color: color.change(map.get($text, "Primary Color"), $alpha: map.get($themeColors, "Alpha - 1"));
+					
+				}
+	// Template Specific Formatting
+		// Orgs
+			// Motto
+				/// Stipulates the following style changes to the motto which appears in organization's sidebars
+				#profile .organization-motto h4 {
+					
+					/// Forces the text to be aligned center (as opposed to left which is the default)
+					text-align: center !important;
+				
+				}
+				
+			
+		// Characters
+			// Stat Sheets
+				/// Stipulates the following changes to RPG character sheets
+				#sheet * {
+					
+					/// Forces the font used to be the normal body font
+					@extend %styles_Body;
+					
+					//font-family: Real Espanola Roman, var(--fa-style-family-duotone) !important;
+				}
+				
+				
+				/// Stipulates the following changes to the h4 style which appears on RPG character sheets
+				#sheet h4 {
+					
+					/// Stipulates that the character sheet h4 formatting will be the same size as other h4 headings
+					font-size: scaleText(1);
+					
+				}
+		
